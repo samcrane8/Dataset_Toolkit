@@ -9,7 +9,7 @@ def convert_tensorflow_to_darknet(dataset_dir, new_annotation_dir):
 
     for file_name in old_dataset.get_annotations():
         print("filename: ", file_name)
-        annotation: AnnotationModel = XMLRead.load(file_name)
+        annotation: AnnotationModel = XMLRead.read(file_name)
         print(annotation.objects)
         darknet_save = DarknetAnnotationSave.save(dataset_dir, new_annotation_dir, annotation, annotation.filename)
 

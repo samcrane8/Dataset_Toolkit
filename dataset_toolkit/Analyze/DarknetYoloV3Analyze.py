@@ -15,18 +15,20 @@ class DarknetYoloV3Analyze:
         frame = cv2.imread(path)
         dark_frame = Image(frame)
         results = self.net.detect(dark_frame)
-        aw, ah, ad = frame.shape
+        ah, aw, ad = frame.shape
         annotation_size = AnnotationSize(aw, ah, ad)
         objects = []
         for cat, score, bounds in results:
             x, y, w, h = bounds
+            # print("output: ", x, " ", y, " ", w, " ", h, "tot: ", aw, " ", ah)
             bndbox = {
-                'xmin': x,
-                'xmax': x+w,
-                'ymin': y,
-                'ymax': y+h,
+                'xmin': x-w/2,
+                'xmax': x+w/2,
+                'ymin': y-h/2,
+                'ymax': y+h/2,
             }
-            objects += [AnnotationObjectModel(str(cat), bndbox)]
+            if cat.decode('utf-8') == 'person':
+                objects += [AnnotationObjectModel(str('0'), bndbox)]
         annotation_model = AnnotationModel(filename, folder, folder+'/'+filename,
                                            annotation_size, objects)
         return annotation_model

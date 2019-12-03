@@ -1,10 +1,17 @@
 import os
 from dataset_toolkit.Model.DatasetPartitionModel import DatasetPartitionModel
 from dataset_toolkit.Model.DatasetModel import DatasetModel
-from dataset_toolkit.GeneratorPipeline import GeneratorPipeline
+from dataset_toolkit.Model.AnnotationModel import AnnotationModel
+
+from dataset_toolkit.Read.AbstractRead import AbstractRead
+from dataset_toolkit.Read.XMLRead import XMLRead
 
 from dataset_toolkit.Save.AbstractAnnotationSave import AbstractAnnotationSave
-from dataset_toolkit.Save.TensorflowAnnotationSave import XMLAnnotationSave
+from dataset_toolkit.Save.XMLAnnotationSave import XMLAnnotationSave
+from dataset_toolkit.Save.DarknetAnnotationSave import DarknetAnnotationSave
+from dataset_toolkit.Save.TFRecordAnnotationSave import TFRecordAnnotationSave
+
+from dataset_toolkit.utils.ProgressBar import ProgressBar
 
 
 def generate(old_dataset_dir: str, new_dataset_dir: str, partitions: list):
@@ -33,11 +40,36 @@ def annotate():
     pass
 
 
-def convert(old_annotation_dir: str, new_annotation_dir: str, old_format: str, new_format: str):
-    print("CONVERTING")
+def convert(dataset_dir: str, old_annotation_dir: str, old_format: str, new_annotation_dir: str,  new_format: str):
+    dataset = DatasetModel(dataset_dir, annotation_dir=old_annotation_dir)
 
-    old_annotation_format = generate_annotation_save(old_format)
-    dataset_model = DatasetModel(data_dir="", annotation_format=old_annotation_format, annotations_dir=old_annotation_dir)
+    files = dataset.get_annotations()
+    progress_bar = ProgressBar(len(files))
+
+    if old_format == 'xml':
+        AnnotationRead: AbstractRead = XMLRead
+    else:
+        print("No recognizable input format.")
+        return
+
+    if new_format == 'txt':
+        AnnotationSave: AbstractAnnotationSave = DarknetAnnotationSave
+    elif new_format == 'tfrecord':
+        AnnotationSave: AbstractAnnotationSave = TFRecordAnnotationSave
+    else:
+        print("No recognizable output format.")
+        return
+
+    for annotation_filename in files:
+        print("filename: ", annotation_filename)
+        try:
+            annotation_model: AnnotationModel = AnnotationRead.read(annotation_filename, dataset_dir)
+            if len(annotation_model.objects) > 0:
+                AnnotationSave.save(dataset_dir, new_annotation_dir, annotation_model, annotation_model.filename)
+            progress_bar.lap()
+        except Exception:
+            print("filename failed: ", annotation_filename)
+            progress_bar.lap()
 
 
 def generate_annotation_save(old_format: str) -> AbstractAnnotationSave:

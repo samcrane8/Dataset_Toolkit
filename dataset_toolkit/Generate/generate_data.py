@@ -1,7 +1,7 @@
 import os, sys
 import cv2
 from dataset_toolkit.Model.AnnotationModel import AnnotationModel
-from dataset_toolkit.Save.TensorflowAnnotationSave import SaveXML
+from dataset_toolkit.Save.XMLAnnotationSave import SaveXML
 
 DEBUG = False
 

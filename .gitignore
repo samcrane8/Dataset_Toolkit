@@ -1,4 +1,9 @@
 *.pyc
-*.png
-*.jpg
+.idea
+*.xml
 venv/
+venv2/
+cfg/
+wgt/
+data/
+*.egg-info

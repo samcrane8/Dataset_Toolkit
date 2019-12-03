@@ -5,7 +5,7 @@ from dataset_toolkit.Model.AnnotationModel import AnnotationModel, AnnotationSiz
 class XMLRead:
 
     @staticmethod
-    def load(file_name):
+    def read(file_name):
         root = etree.parse(file_name)
         filename = root.xpath('filename')[0].text
         folder = root.xpath('folder')[0].text

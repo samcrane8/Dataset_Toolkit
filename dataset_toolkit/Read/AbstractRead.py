@@ -1,7 +1,7 @@
-from ABC import ABC
+from dataset_toolkit.Model.AnnotationModel import AnnotationModel
 
 
-class AbstractRead(ABC):
+class AbstractRead:
 
-    def read(self, path: str) -> list:
+    def read(self, path: str) -> AnnotationModel:
         pass

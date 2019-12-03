@@ -1,8 +1,9 @@
 from lxml import etree
+from dataset_toolkit.Read.AbstractRead import AbstractRead
 from dataset_toolkit.Model.AnnotationModel import AnnotationModel, AnnotationSize, AnnotationObjectModel
 
 
-class XMLRead:
+class XMLRead(AbstractRead):
 
     @staticmethod
     def read(file_name):
@@ -17,9 +18,9 @@ class XMLRead:
 
     @staticmethod
     def load_size(size_xml):
-        width = size_xml.xpath('width')[0].text
-        height = size_xml.xpath('height')[0].text
-        depth = size_xml.xpath('depth')[0].text
+        width = int(size_xml.xpath('width')[0].text)
+        height = int(size_xml.xpath('height')[0].text)
+        depth = int(size_xml.xpath('depth')[0].text)
         return AnnotationSize(width, height, depth)
 
     @staticmethod

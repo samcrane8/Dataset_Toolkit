@@ -6,7 +6,7 @@ class AnnotationModel:
         self.filename = filename
         self.folder = folder
         self.path = path
-        self.size = size
+        self.size: AnnotationSize = size
         self.objects = objects
 
     def dict(self):
@@ -35,9 +35,9 @@ class AnnotationObjectModel:
 class AnnotationSize:
 
     def __init__(self, width, height, depth):
-        self.width = width
-        self.height = height
-        self.depth = depth
+        self.width: int = width
+        self.height: int = height
+        self.depth: int = depth
 
     def dict(self):
         return {

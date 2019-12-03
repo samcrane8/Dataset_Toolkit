@@ -62,14 +62,13 @@ def convert(dataset_dir: str, old_annotation_dir: str, old_format: str, new_anno
 
     for annotation_filename in files:
         print("filename: ", annotation_filename)
-        try:
-            annotation_model: AnnotationModel = AnnotationRead.read(annotation_filename, dataset_dir)
-            if len(annotation_model.objects) > 0:
-                AnnotationSave.save(dataset_dir, new_annotation_dir, annotation_model, annotation_model.filename)
-            progress_bar.lap()
-        except Exception:
-            print("filename failed: ", annotation_filename)
-            progress_bar.lap()
+        # try:
+        annotation_model: AnnotationModel = AnnotationRead.read(annotation_filename)
+        if len(annotation_model.objects) > 0:
+            AnnotationSave.save(dataset_dir, new_annotation_dir, annotation_model, annotation_model.filename)
+        # except Exception:
+        # print("filename failed: ", annotation_filename)
+        progress_bar.lap()
 
 
 def generate_annotation_save(old_format: str) -> AbstractAnnotationSave:

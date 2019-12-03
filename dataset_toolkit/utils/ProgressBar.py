@@ -14,7 +14,7 @@ class ProgressBar:
         self.counter += 1
         elapsed_time = time.time() - self.last_time
         total_time = time.time() - self.start_time
-        avg_time = self.total_time / self.counter
+        avg_time = total_time / self.counter
         self.last_time = time.time()
         end_time = avg_time * (self.max_count - self.counter)
         end_time = str(datetime.timedelta(seconds=end_time))

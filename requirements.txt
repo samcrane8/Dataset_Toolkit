@@ -1,4 +1,5 @@
 lxml
 numpy
 cython
-yolo34py-gpu
+yolo34py
+tensorflow

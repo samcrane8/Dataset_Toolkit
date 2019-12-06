@@ -9,7 +9,9 @@ from dataset_toolkit.Read.XMLRead import XMLRead
 from dataset_toolkit.Save.AbstractAnnotationSave import AbstractAnnotationSave
 from dataset_toolkit.Save.XMLAnnotationSave import XMLAnnotationSave
 from dataset_toolkit.Save.DarknetAnnotationSave import DarknetAnnotationSave
-from dataset_toolkit.Save.TFRecordAnnotationSave import TFRecordAnnotationSave
+
+from dataset_toolkit.Export.AbstractExport import AbstractExport
+from dataset_toolkit.Export.TFRecordExport import TFRecordAnnotationSave
 
 from dataset_toolkit.utils.ProgressBar import ProgressBar
 
@@ -40,7 +42,7 @@ def annotate():
     pass
 
 
-def convert(dataset_dir: str, old_annotation_dir: str, old_format: str, new_annotation_dir: str,  new_format: str):
+def export(dataset_dir: str, old_annotation_dir: str, old_format: str, new_annotation_dir: str, new_format: str):
     dataset = DatasetModel(dataset_dir, annotation_dir=old_annotation_dir)
 
     files = dataset.get_annotations()
@@ -52,10 +54,9 @@ def convert(dataset_dir: str, old_annotation_dir: str, old_format: str, new_anno
         print("No recognizable input format.")
         return
 
-    if new_format == 'txt':
-        AnnotationSave: AbstractAnnotationSave = DarknetAnnotationSave
-    elif new_format == 'tfrecord':
-        AnnotationSave: AbstractAnnotationSave = TFRecordAnnotationSave
+    if new_format == 'tfrecord':
+        exporter: AbstractExport = TFRecordAnnotationSave(os.path.join(new_annotation_dir, 'test.tfrecord'))
+        exporter.start()
     else:
         print("No recognizable output format.")
         return
@@ -65,10 +66,12 @@ def convert(dataset_dir: str, old_annotation_dir: str, old_format: str, new_anno
         # try:
         annotation_model: AnnotationModel = AnnotationRead.read(annotation_filename)
         if len(annotation_model.objects) > 0:
-            AnnotationSave.save(dataset_dir, new_annotation_dir, annotation_model, annotation_model.filename)
+            exporter.append(dataset_dir, new_annotation_dir, annotation_model, annotation_model.filename)
         # except Exception:
         # print("filename failed: ", annotation_filename)
         progress_bar.lap()
+
+    exporter.close()
 
 
 def generate_annotation_save(old_format: str) -> AbstractAnnotationSave:

@@ -42,7 +42,7 @@ def annotate():
     pass
 
 
-def export(dataset_dir: str, old_annotation_dir: str, old_format: str, new_annotation_dir: str, new_format: str):
+def export(dataset_dir: str, old_annotation_dir: str, old_format: str, export_file: str, new_format: str):
     dataset = DatasetModel(dataset_dir, annotation_dir=old_annotation_dir)
 
     files = dataset.get_annotations()
@@ -55,7 +55,7 @@ def export(dataset_dir: str, old_annotation_dir: str, old_format: str, new_annot
         return
 
     if new_format == 'tfrecord':
-        exporter: AbstractExport = TFRecordAnnotationSave(os.path.join(new_annotation_dir, 'test.tfrecord'))
+        exporter: AbstractExport = TFRecordAnnotationSave(export_file)
         exporter.start()
     else:
         print("No recognizable output format.")

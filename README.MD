@@ -4,7 +4,9 @@ Python package with basic functionality for manipulating datasets. You can find 
 
 ## Setup
 
-  cd dataset_toolkit
-  pip install -e .
+```bash
+cd dataset_toolkit
+pip install -e .
+```
   
 Now you should be able to import the dataset_toolkit library in your scripts.

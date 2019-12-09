@@ -1,6 +1,10 @@
 # Dataset Toolkit
 
-Playing with the idea of building this out as a full toolset. It would not be too difficult and would help with integrating our processes
-into the rest of Osiris. 
+Python package with basic functionality for manipulating datasets. You can find examples of it's use in the scripts folder.
 
-There are 5 major functions of this toolset: crawl, annotate, generate, save, convert.
+## Setup
+
+  cd dataset_toolkit
+  pip install -e .
+  
+Now you should be able to import the dataset_toolkit library in your scripts.
